@@ -1,0 +1,6 @@
+.ratingContainer span {
+  vertical-align: text-bottom;
+}
+.ratingContainer > :first-child {
+  margin-right: 4px;
+}
