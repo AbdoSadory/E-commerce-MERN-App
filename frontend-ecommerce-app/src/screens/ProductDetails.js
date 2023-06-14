@@ -1,6 +1,5 @@
-import React from 'react'
-import products from '../products'
-import { Link, useParams } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import {
   Breadcrumb,
   Button,
@@ -12,11 +11,19 @@ import {
 } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import ProductRating from '../components/rating/Rating'
+import axios from 'axios'
 
 const ProductDetails = () => {
+  const [product, setProduct] = useState({})
   let params = useParams()
-  let product = products.find((product) => product._id === params.id)
-  console.log(product)
+  const fetchProduct = async () => {
+    const { data } = await axios.get(`/api/product/${params.id}`)
+    setProduct(data)
+  }
+  useEffect(() => {
+    fetchProduct()
+  }, [])
+
   return (
     <>
       <section>
@@ -31,8 +38,8 @@ const ProductDetails = () => {
         <Row>
           <Col className="mt-3" md="6">
             <Image
-              src={product.image}
-              alt={product.name}
+              src={product && product.image}
+              alt={product && product.name}
               className=" rounded"
               fluid
             />
@@ -40,16 +47,16 @@ const ProductDetails = () => {
           <Col className="mt-3">
             <ListGroup as="ul">
               <ListGroupItem as="li">
-                <h1 className="fs-5 m-0">{product.name}</h1>
+                <h1 className="fs-5 m-0">{product && product.name}</h1>
               </ListGroupItem>
               <ListGroupItem as="li">
                 <span className="fw-bold">Description</span> :{' '}
-                {product.description}
+                {product && product.description}
               </ListGroupItem>
               <ListGroupItem as="li">
                 <ProductRating
-                  rating={product.rating}
-                  text={`${product.numReviews} Reviews`}
+                  rating={product && product.rating}
+                  text={`${product && product.numReviews} Reviews`}
                 />
               </ListGroupItem>
             </ListGroup>
@@ -58,13 +65,14 @@ const ProductDetails = () => {
                 as="li"
                 className=" border-light border-bottom border-bottom-4"
               >
-                <span className="fw-bold">Price</span> : {product.price}
+                <span className="fw-bold">Price</span> :{' '}
+                {product && product.price}
               </ListGroupItem>
               <ListGroupItem
                 as="li"
                 className=" border-light border-bottom border-bottom-4"
               >
-                {product.countInStock ? (
+                {product && product.countInStock ? (
                   <span className="stockStatus">
                     <svg
                       className="me-1"
@@ -98,7 +106,7 @@ const ProductDetails = () => {
                 <Button
                   type="button"
                   variant="light"
-                  disabled={product.countInStock ? false : true}
+                  disabled={product && product.countInStock ? false : true}
                 >
                   Add To Cart
                 </Button>
