@@ -1,5 +1,6 @@
 import { Container } from 'react-bootstrap'
 import './App.css'
+import 'react-toastify/dist/ReactToastify.css'
 import Footer from './components/footer/Footer'
 import Header from './components/header/Header'
 import Home from './screens/Home'

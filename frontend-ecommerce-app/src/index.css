@@ -26,3 +26,17 @@ a {
 .stockStatus svg {
   vertical-align: sub;
 }
+h1 {
+  height: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+ul h1 {
+  height: unset;
+  display: unset;
+  justify-content: unset;
+  align-items: unset;
+  background-color: unset;
+}
