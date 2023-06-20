@@ -1,36 +1,41 @@
-import React, { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import {
   Breadcrumb,
   Button,
   Col,
+  Form,
   Image,
   ListGroup,
   ListGroupItem,
   Row,
 } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
+import { ToastContainer } from 'react-toastify'
+import Loader from '../components/messages/Loader'
+import ErrorMessage from '../components/messages/ErrorMessage'
 import ProductRating from '../components/rating/Rating'
 import { useDispatch, useSelector } from 'react-redux'
 import { getProductDetails } from '../redux/slices/productDetailsSlice'
-import Loader from '../components/messages/Loader'
-import ErrorMessage from '../components/messages/ErrorMessage'
-import { ToastContainer } from 'react-toastify'
+import { addItem } from '../redux/slices/cartSlice'
 
 const ProductDetails = () => {
+  const [qty, setQty] = useState(1)
   let params = useParams()
-  const productDetailsSliceData = useSelector(
-    (state) => state.productDetails.initialState
-  )
+  const productDetailsSliceData = useSelector((state) => state.productDetails)
   const dispatch = useDispatch()
-
+  const navigate = useNavigate()
   useEffect(() => {
     dispatch(getProductDetails(params.id))
   }, [])
 
+  const addToCartHandler = () => {
+    dispatch(addItem({ product: productDetailsSliceData.product, qty: qty }))
+    navigate(`/cart/${params.id}/?qty=${qty}`)
+  }
   return (
     <>
-      {!productDetailsSliceData ? (
+      {productDetailsSliceData.isloading ? (
         <Loader />
       ) : productDetailsSliceData.error ? (
         <h3 className="text-center text-dark text-capitalize">
@@ -39,7 +44,7 @@ const ProductDetails = () => {
             message={productDetailsSliceData.errorMessage}
           />
         </h3>
-      ) : (
+      ) : productDetailsSliceData.product._id === params.id ? (
         <>
           <section>
             <Breadcrumb className="productDetailsBreadcrumb">
@@ -56,14 +61,8 @@ const ProductDetails = () => {
             <Row>
               <Col className="mt-3" md="6">
                 <Image
-                  src={
-                    productDetailsSliceData &&
-                    productDetailsSliceData.product.image
-                  }
-                  alt={
-                    productDetailsSliceData &&
-                    productDetailsSliceData.product.name
-                  }
+                  src={productDetailsSliceData.product.image}
+                  alt={productDetailsSliceData.product.name}
                   className=" rounded"
                   fluid
                 />
@@ -72,25 +71,17 @@ const ProductDetails = () => {
                 <ListGroup as="ul">
                   <ListGroupItem as="li">
                     <h1 className="fs-5 m-0">
-                      {productDetailsSliceData &&
-                        productDetailsSliceData.product.name}
+                      {productDetailsSliceData.product.name}
                     </h1>
                   </ListGroupItem>
                   <ListGroupItem as="li">
                     <span className="fw-bold">Description</span> :{' '}
-                    {productDetailsSliceData &&
-                      productDetailsSliceData.product.description}
+                    {productDetailsSliceData.product.description}
                   </ListGroupItem>
                   <ListGroupItem as="li">
                     <ProductRating
-                      rating={
-                        productDetailsSliceData &&
-                        productDetailsSliceData.product.rating
-                      }
-                      text={`${
-                        productDetailsSliceData &&
-                        productDetailsSliceData.product.numReviews
-                      } Reviews`}
+                      rating={productDetailsSliceData.product.rating}
+                      text={`${productDetailsSliceData.product.numReviews} Reviews`}
                     />
                   </ListGroupItem>
                 </ListGroup>
@@ -100,15 +91,13 @@ const ProductDetails = () => {
                     className=" border-light border-bottom border-bottom-4"
                   >
                     <span className="fw-bold">Price</span> :{' '}
-                    {productDetailsSliceData &&
-                      productDetailsSliceData.product.price}
+                    {productDetailsSliceData.product.price}
                   </ListGroupItem>
                   <ListGroupItem
                     as="li"
                     className=" border-light border-bottom border-bottom-4"
                   >
-                    {productDetailsSliceData &&
-                    productDetailsSliceData.product.countInStock ? (
+                    {productDetailsSliceData.product.countInStock ? (
                       <span className="stockStatus">
                         <svg
                           className="me-1"
@@ -138,12 +127,40 @@ const ProductDetails = () => {
                       </span>
                     )}
                   </ListGroupItem>
-                  <ListGroupItem>
+                  {productDetailsSliceData.product.countInStock > 0 && (
+                    <ListGroupItem as="li">
+                      <Row>
+                        <Col>Qty</Col>
+                        <Col>
+                          <Form.Control
+                            as="select"
+                            value={qty}
+                            onChange={(e) => setQty(e.target.value)}
+                          >
+                            {[
+                              ...Array(
+                                productDetailsSliceData.product.countInStock
+                              ).keys(),
+                            ].map((x) => (
+                              <option
+                                key={x}
+                                value={x + 1}
+                                style={{ color: 'blue' }}
+                              >
+                                {x + 1}
+                              </option>
+                            ))}
+                          </Form.Control>
+                        </Col>
+                      </Row>
+                    </ListGroupItem>
+                  )}
+                  <ListGroupItem className="text-center">
                     <Button
+                      onClick={addToCartHandler}
                       type="button"
                       variant="light"
                       disabled={
-                        productDetailsSliceData &&
                         productDetailsSliceData.product.countInStock
                           ? false
                           : true
@@ -157,6 +174,8 @@ const ProductDetails = () => {
             </Row>
           </section>
         </>
+      ) : (
+        <Loader />
       )}
       <ToastContainer autoClose={2000} />
     </>

@@ -7,6 +7,7 @@ const initialState = {
   error: false,
   errorMessage: '',
 }
+// console.log('hi from Product Slice', initialState)
 export const allProducts = createAsyncThunk(
   'products/allProducts',
   async () => {
@@ -59,11 +60,10 @@ export const productsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(allProducts.fulfilled, (state, payload) => {
-      state.initialState = { ...state.initialState, ...payload.payload }
+      return { ...state, ...payload.payload }
     })
     builder.addCase(allProducts.rejected, (state, payload) => {
-      state.initialState = { ...state.initialState, ...payload.payload }
+      return { ...state, ...payload.payload }
     })
   },
 })
-// export const { fetchingProducts } = productsSlice.actions
