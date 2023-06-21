@@ -23,6 +23,7 @@ const ProductDetails = () => {
   const [qty, setQty] = useState(1)
   let params = useParams()
   const productDetailsSliceData = useSelector((state) => state.productDetails)
+  const cartSliceData = useSelector((state) => state.cart)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   useEffect(() => {
@@ -30,7 +31,9 @@ const ProductDetails = () => {
   }, [])
 
   const addToCartHandler = () => {
-    dispatch(addItem({ product: productDetailsSliceData.product, qty: qty }))
+    dispatch(
+      addItem({ product: productDetailsSliceData.product, qty: Number(qty) })
+    )
     navigate(`/cart/${params.id}/?qty=${qty}`)
   }
   return (
@@ -159,7 +162,7 @@ const ProductDetails = () => {
                     <Button
                       onClick={addToCartHandler}
                       type="button"
-                      variant="light"
+                      variant="danger"
                       disabled={
                         productDetailsSliceData.product.countInStock
                           ? false

@@ -40,3 +40,9 @@ ul h1 {
   align-items: unset;
   background-color: unset;
 }
+.productCardInCart {
+  margin-bottom: 20px;
+}
+.productCardInCart:last-child {
+  margin-bottom: 0px;
+}

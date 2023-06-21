@@ -11,20 +11,34 @@ export const cartSlice = createSlice({
   reducers: {
     addItem(state, payload) {
       const item = payload.payload
-      console.log(item)
       let isExist = state.items.find(
-        (element) => element._id === item.product._id
+        (element) => element.product._id === item.product._id
       )
-      console.log(Boolean(isExist))
       if (!isExist) {
         let newState = {
           items: [...state.items, item],
         }
         localStorage.setItem('items', JSON.stringify(newState.items))
-        return newState
+        return { ...state, ...newState }
+      } else {
+        state.items = state.items.map((element) => {
+          if (element.product._id === item.product._id) {
+            element.qty = item.qty
+          }
+          return element
+        })
+        localStorage.setItem('items', JSON.stringify(state.items))
+        return state
       }
     },
-    removeItem(state, payload) {},
+    removeItem(state, payload) {
+      console.log(payload.payload)
+      let newitems = state.items.filter(
+        (item) => item.product._id !== payload.payload
+      )
+      localStorage.setItem('items', JSON.stringify(newitems))
+      return { ...state, items: newitems }
+    },
   },
 })
 

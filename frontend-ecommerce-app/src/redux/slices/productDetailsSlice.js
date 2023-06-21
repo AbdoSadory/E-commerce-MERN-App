@@ -12,14 +12,7 @@ let lastProduct
 export const getProductDetails = createAsyncThunk(
   'product/getProduct',
   async (id) => {
-    console.log(
-      'lastProduct ID :',
-      lastProduct && lastProduct.product._id,
-      'id :',
-      id
-    )
     if (lastProduct && lastProduct.product._id === id) {
-      console.log(' return', lastProduct.product._id, id)
       return lastProduct
     }
     const data = await axios
@@ -42,11 +35,9 @@ export const getProductDetails = createAsyncThunk(
           progress: undefined,
           theme: 'light',
         })
-        console.log('looooading for new Product Details')
         return result
       })
       .catch((e) => {
-        console.log('error')
         toast.error(e.response.data.message, {
           position: 'top-right',
           autoClose: 3000,
