@@ -5,6 +5,8 @@ import dotenv from 'dotenv'
 import connectDB from './config/db.js'
 import productRouter from './routes/productsRoutes.js'
 import { errorHandler, notFound } from './middleware/errorMiddleware.js'
+import userRouter from './routes/userRoutes.js'
+import verifyToken from './middleware/authMiddleware.js'
 const app = express()
 dotenv.config()
 connectDB()
@@ -18,9 +20,10 @@ app.listen(
 app.get('/', (req, res) => {
   res.send('API is running !')
 })
+app.use(express.json()) // body parser
 
 app.use('/api/products', productRouter)
+app.use('/api/users', userRouter)
 
 app.use(notFound)
-
 app.use(errorHandler)

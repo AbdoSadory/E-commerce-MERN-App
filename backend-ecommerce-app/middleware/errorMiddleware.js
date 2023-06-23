@@ -4,7 +4,7 @@ const notFound = (req, res, next) => {
   next(err)
 }
 const errorHandler = (err, req, res, next) => {
-  console.log("hi it's global error middleware", res.statusCode)
+  console.log('hi from global error middleware', res.statusCode)
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode // in case you get 200 code in error case
   res.status(statusCode).send({
     message: err.message,
