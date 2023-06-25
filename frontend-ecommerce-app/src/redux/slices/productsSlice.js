@@ -32,7 +32,7 @@ export const allProducts = createAsyncThunk(
         }
       })
       .catch((e) => {
-        toast.error(e.response.data.message, {
+        toast.error('Failed to fetch products', {
           position: 'top-right',
           autoClose: 3000,
           hideProgressBar: false,
@@ -47,7 +47,7 @@ export const allProducts = createAsyncThunk(
           products: [],
           isloading: false,
           error: true,
-          errorMessage: e.message,
+          errorMessage: e.response.data.message,
         }
       })
     return data

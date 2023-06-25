@@ -38,7 +38,7 @@ export const getProductDetails = createAsyncThunk(
         return result
       })
       .catch((e) => {
-        toast.error(e.response.data.message, {
+        toast.error('Failed to fetch product details', {
           position: 'top-right',
           autoClose: 3000,
           hideProgressBar: false,
@@ -53,7 +53,7 @@ export const getProductDetails = createAsyncThunk(
           product: {},
           isloading: false,
           error: true,
-          errorMessage: e.message,
+          errorMessage: e.response.data.message,
         }
       })
     return data

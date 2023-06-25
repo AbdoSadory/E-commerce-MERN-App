@@ -4,7 +4,7 @@ import User from '../models/userModel.js'
 import generateToken from '../utils/generateToken.js'
 
 // @desc    Auth users and get Token
-// @route   /api/users/login
+// @route   Post /api/users/login
 // @access  Public
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body // with the help of express.json() middleware
@@ -21,12 +21,12 @@ const authUser = asyncHandler(async (req, res) => {
     })
   } else {
     res.status(401)
-    throw new Error('wrong email or password')
+    throw new Error('Wrong Email or Password')
   }
 })
 
 // @desc    Register users
-// @route   /api/users/register
+// @route   Post /api/users/register
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body
@@ -34,7 +34,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (userExists) {
     res.status(400)
-    throw new Error('user already exsits')
+    throw new Error('User Already Exsits')
   }
 
   const user = await User.create({
@@ -57,11 +57,47 @@ const registerUser = asyncHandler(async (req, res) => {
 })
 
 // @desc    Get user
-// @route   /api/users/profile
+// @route   Get /api/users/profile
 // @access  Private
 const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.userDecodedToken.id).select('-password')
   let { _id, name, email, isAdmin } = user
   res.send({ _id, name, email, isAdmin })
 })
-export { authUser, getUserProfile, registerUser }
+
+// @desc    Update user  data
+// @route   POST /api/users/profile
+// @access  Private
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.userDecodedToken.id)
+
+  if (user) {
+    user.name = req.body.name || user.name
+    if (req.body.email) {
+      const isExist = await User.findOne({ email: req.body.email })
+      if (isExist) {
+        res.status(401)
+        throw new Error('Email Already exists')
+      } else {
+        user.email = req.body.email
+      }
+    }
+
+    if (req.body.password) {
+      user.password = req.body.password || user.password
+    }
+
+    const updatedUser = await user.save()
+    res.send({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      token: generateToken(updatedUser._id),
+    })
+  } else {
+    res.status(404)
+    throw new Error('User Not Found')
+  }
+})
+export { authUser, getUserProfile, registerUser, updateUserProfile }

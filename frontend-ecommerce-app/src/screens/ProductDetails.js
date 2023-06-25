@@ -23,7 +23,6 @@ const ProductDetails = () => {
   const [qty, setQty] = useState(1)
   let params = useParams()
   const productDetailsSliceData = useSelector((state) => state.productDetails)
-  const cartSliceData = useSelector((state) => state.cart)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   useEffect(() => {

@@ -29,14 +29,14 @@ const Cart = () => {
     <>
       <h2 className="text-capitalize">shipping cart</h2>
       <Row>
-        <Col lg={6}>
+        <Col className="shippingCartProductsContainer" lg={6}>
           {cartSliceData.items.length ? (
             cartSliceData.items.map((item) => (
               <Row
                 key={item.product._id}
                 className="productCardInCart align-items-center"
               >
-                <Col md={2}>
+                <Col className="shippingCartProductImageContainer" md={2}>
                   <Image
                     src={item.product.image}
                     alt={item.product.name}
@@ -44,8 +44,8 @@ const Cart = () => {
                     rounded
                   />
                 </Col>
-                <Col md={4}>
-                  <h4 className="fs-6 m-0">
+                <Col className="shippingCartProductTitleContainer" md={4}>
+                  <h4 className="m-0">
                     <Link
                       to={`/product/${item.product._id}`}
                       className="text-decoration-underline"
@@ -54,10 +54,13 @@ const Cart = () => {
                     </Link>
                   </h4>
                 </Col>
-                <Col md={2} className="text-center">
+                <Col
+                  className="shippingCartProductPriceContainer text-center"
+                  md={2}
+                >
                   {item.product.price}$
                 </Col>
-                <Col md={2}>
+                <Col className="shippingCartProductQtyContainer" md={2}>
                   <Form.Control
                     variant="primary"
                     as="select"
