@@ -20,6 +20,10 @@ a {
   justify-content: center;
   align-items: center;
 }
+.processStepSection {
+  margin: 36px 0px;
+}
+
 .profileSection {
   height: 70vh;
 }
@@ -54,12 +58,11 @@ ul h1 {
   border-bottom: unset;
 }
 .formContainer {
-  height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.formContainer div {
+.formContainer > div {
   width: 80%;
 }
 .formContainer form {
@@ -85,7 +88,13 @@ ul h1 {
   right: 20px;
   z-index: -1;
 }
+
 @media (max-width: 992px) {
+  h1 {
+    font-size: 1.25rem;
+    text-align: center;
+    height: 130px;
+  }
   .navbar-nav {
     max-height: 160px !important;
   }
@@ -97,6 +106,9 @@ ul h1 {
   }
 }
 @media (max-width: 768px) {
+  .processStepSection {
+    margin: 22px 0px;
+  }
   .shippingCartProductImageContainer,
   .shippingCartProductTitleContainer,
   .shippingCartProductPriceContainer,
@@ -121,5 +133,31 @@ ul h1 {
   }
   .shippingCartProductPriceContainer {
     font-size: 20px;
+  }
+  .orderSummarySection {
+    margin-top: 10px;
+  }
+  .ordersTable {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 425px) {
+  .processStepSection {
+    margin: 10px 0px;
+  }
+  .processStep {
+    font-size: 12px;
+  }
+}
+@media (max-width: 375px) {
+  .processStep {
+    font-size: 8px;
+  }
+  .ordersTable {
+    font-size: 8px;
+  }
+  .tabsSection ul li button {
+    font-size: 10px;
   }
 }

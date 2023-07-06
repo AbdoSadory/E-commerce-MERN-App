@@ -17,13 +17,13 @@ import { addItem, removeItem } from '../redux/slices/cartSlice'
 const Cart = () => {
   const navigate = useNavigate()
   const cartSliceData = useSelector((state) => state.cart)
+  const userSliceData = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const removeFromCartHandler = (id) => {
     dispatch(removeItem(id))
   }
   const checkOutHandler = () => {
-    console.log('Check out')
-    navigate('/login?redirect=shipping')
+    userSliceData.isLogIn ? navigate('/shipping') : navigate('/login')
   }
   return (
     <>

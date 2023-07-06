@@ -13,11 +13,11 @@ import {
 import { LinkContainer } from 'react-router-bootstrap'
 import { ToastContainer } from 'react-toastify'
 import Loader from '../components/messages/Loader'
-import ErrorMessage from '../components/messages/ErrorMessage'
 import ProductRating from '../components/rating/Rating'
 import { useDispatch, useSelector } from 'react-redux'
 import { getProductDetails } from '../redux/slices/productDetailsSlice'
 import { addItem } from '../redux/slices/cartSlice'
+import Message from '../components/messages/Message'
 
 const ProductDetails = () => {
   const [qty, setQty] = useState(1)
@@ -41,7 +41,7 @@ const ProductDetails = () => {
         <Loader />
       ) : productDetailsSliceData.error ? (
         <h3 className="text-center text-dark text-capitalize">
-          <ErrorMessage
+          <Message
             variant={'primary'}
             message={productDetailsSliceData.errorMessage}
           />

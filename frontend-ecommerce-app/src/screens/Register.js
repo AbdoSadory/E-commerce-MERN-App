@@ -4,25 +4,29 @@ import { useDispatch, useSelector } from 'react-redux'
 import { register } from '../redux/slices/userSlice'
 import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
-import ErrorMessage from '../components/messages/ErrorMessage'
+import Message from '../components/messages/Message'
 
 const Register = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const userSliceData = useSelector((state) => state.user)
+  const [isLoading, setIsLoading] = useState(userSliceData.isloading)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const submitHandler = (e) => {
     e.preventDefault()
+    setIsLoading(true)
     dispatch(register({ name, email, password }))
       .then((res) => {
         if (res.payload.isLogIn) {
           navigate('/')
         }
+        setIsLoading(false)
       })
       .catch((e) => {
         console.log(e.message)
+        setIsLoading(false)
       })
   }
   useEffect(() => {}, [])
@@ -34,10 +38,7 @@ const Register = () => {
             Be One of our world
           </h2>
           {userSliceData.error && (
-            <ErrorMessage
-              variant="danger"
-              message={userSliceData.errorMessage}
-            />
+            <Message variant="danger" message={userSliceData.errorMessage} />
           )}
           <Form
             onSubmit={(e) => {
@@ -98,7 +99,7 @@ const Register = () => {
                 className="text-capitalize d-inline-block"
                 style={{ minWidth: '110px' }}
               >
-                {userSliceData.isloading ? (
+                {isLoading ? (
                   <Spinner
                     animation="border"
                     variant="warning"

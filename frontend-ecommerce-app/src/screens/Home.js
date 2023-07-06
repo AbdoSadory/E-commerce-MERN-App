@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { allProducts } from '../redux/slices/productsSlice'
 import { ToastContainer } from 'react-toastify'
 import Loader from '../components/messages/Loader'
-import ErrorMessage from '../components/messages/ErrorMessage'
+import Message from '../components/messages/Message'
 
 const Home = () => {
   const productsSliceData = useSelector((state) => state.products)
@@ -16,13 +16,13 @@ const Home = () => {
   return (
     <>
       <h1 className="text-center m-0">Welcome to our Project</h1>
-      <h2>Latest Products</h2>
+      <h2 className="mt-2">Latest Products</h2>
       <Row className="justify-content-between">
         {productsSliceData.isloading ? (
           <Loader />
         ) : productsSliceData.error ? (
           <h3 className="text-center text-dark text-capitalize">
-            <ErrorMessage
+            <Message
               variant={'primary'}
               message={productsSliceData && productsSliceData.errorMessage}
             />

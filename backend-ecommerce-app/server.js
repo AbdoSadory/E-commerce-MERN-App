@@ -6,7 +6,7 @@ import connectDB from './config/db.js'
 import productRouter from './routes/productsRoutes.js'
 import { errorHandler, notFound } from './middleware/errorMiddleware.js'
 import userRouter from './routes/userRoutes.js'
-import verifyToken from './middleware/authMiddleware.js'
+import { orderRouter } from './routes/orderRoutes.js'
 const app = express()
 dotenv.config()
 connectDB()
@@ -24,6 +24,7 @@ app.use(express.json()) // body parser
 
 app.use('/api/products', productRouter)
 app.use('/api/users', userRouter)
+app.use('/api/orders', orderRouter)
 
 app.use(notFound)
 app.use(errorHandler)

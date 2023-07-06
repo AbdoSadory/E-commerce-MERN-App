@@ -18,6 +18,7 @@ const authUser = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
+      orders: user.orders,
     })
   } else {
     res.status(401)
@@ -61,8 +62,8 @@ const registerUser = asyncHandler(async (req, res) => {
 // @access  Private
 const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.userDecodedToken.id).select('-password')
-  let { _id, name, email, isAdmin } = user
-  res.send({ _id, name, email, isAdmin })
+  let { _id, name, email, isAdmin, orders } = user
+  res.send({ _id, name, email, isAdmin, orders })
 })
 
 // @desc    Update user  data

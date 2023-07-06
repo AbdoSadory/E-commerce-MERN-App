@@ -12,6 +12,10 @@ import Login from './screens/Login'
 import Register from './screens/Register'
 import Profile from './screens/Profile'
 import { useSelector } from 'react-redux'
+import Shipping from './screens/Shipping'
+import Payment from './screens/Payment'
+import PlaceOrder from './screens/PlaceOrder'
+import OrderDetails from './screens/OrderDetails'
 
 function App() {
   const userSliceData = useSelector((state) => state.user)
@@ -30,6 +34,16 @@ function App() {
               {userSliceData.isLogIn && (
                 <Route path="/profile" Component={Profile} />
               )}
+              {userSliceData.isLogIn && (
+                <Route path="/shipping" Component={Shipping} />
+              )}
+              {userSliceData.isLogIn && (
+                <Route path="/payment" Component={Payment} />
+              )}
+              {userSliceData.isLogIn && (
+                <Route path="/placeorder" Component={PlaceOrder} />
+              )}
+              <Route path="/order/:id" Component={OrderDetails} />
               <Route path="*" Component={NotFound} />
             </Routes>
           </Container>

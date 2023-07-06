@@ -19,6 +19,9 @@ const userSchema = new mongoose.Schema(
       required: [true, 'isAdmin is required '],
       default: false,
     },
+    orders: {
+      type: Array,
+    },
   },
   {
     timestamps: true,

@@ -212,6 +212,16 @@ export const userSlice = createSlice({
         errorMessage: '',
       }
     },
+    // addOrders(state, payload) {
+    //   const result = {
+    //     ...state,
+    //     user: {
+    //       ...state.user,
+    //       orders: payload.payload,
+    //     },
+    //   }
+    //   return result
+    // },
   },
   extraReducers: (builder) => {
     builder.addCase(logIn.fulfilled, (state, payload) => {
@@ -236,4 +246,4 @@ export const userSlice = createSlice({
   },
 })
 
-export const { logout } = userSlice.actions
+export const { logout, addOrders } = userSlice.actions

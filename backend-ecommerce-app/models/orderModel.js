@@ -1,33 +1,32 @@
 import mongoose from 'mongoose'
+mongoose.Schema.Types.Boolean.checkRequired((v) => v != null)
+mongoose.Schema.Types.Date.checkRequired((v) => v != null)
 const orderSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      required: [true, 'user is required '],
+      required: [true, 'user is required'],
       ref: 'User',
     },
     orderItems: [
       {
-        name: {
-          type: String,
-          required: [true, 'name is required '],
+        product: {
+          name: {
+            type: String,
+            required: [true, 'name is required '],
+          },
+          image: {
+            type: String,
+            required: [true, 'image is required '],
+          },
+          price: {
+            type: Number,
+            required: [true, 'price is required '],
+          },
         },
         qty: {
           type: Number,
           required: [true, 'qty is required '],
-        },
-        image: {
-          type: String,
-          required: [true, 'image is required '],
-        },
-        price: {
-          type: Number,
-          required: [true, 'price is required '],
-        },
-        prodcut: {
-          type: mongoose.Schema.Types.ObjectId,
-          required: [true, 'prodcut is required '],
-          ref: 'Product',
         },
       },
     ],
@@ -98,7 +97,7 @@ const orderSchema = new mongoose.Schema(
     },
     deliveredAt: {
       type: Date,
-      required: [true, 'deliveredAt is required '],
+      required: [true, 'deliveredAt is required'],
     },
   },
   {

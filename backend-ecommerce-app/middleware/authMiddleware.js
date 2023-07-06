@@ -11,6 +11,7 @@ const verifyToken = expressAsyncHandler(async (req, res, next) => {
     try {
       token = req.headers.authorization.split(' ')[1]
       req.userDecodedToken = jwt.verify(token, process.env.JWT_KEY)
+      req.id = req.userDecodedToken.id
       next()
     } catch (e) {
       console.log(e.message)
