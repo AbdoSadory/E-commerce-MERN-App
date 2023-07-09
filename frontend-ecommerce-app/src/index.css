@@ -1,14 +1,14 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 a {
@@ -81,14 +81,34 @@ ul h1 {
   position: relative;
 }
 .shippingCartProductQtyContainer::after {
-  content: 'V';
+  content: "V";
   position: absolute;
   font-size: 10px;
   top: 18px;
   right: 20px;
   z-index: -1;
 }
-
+.selectContainer {
+  position: relative;
+}
+.selectContainer::after {
+  content: "V";
+  position: absolute;
+  font-size: 10px;
+  top: 18px;
+  right: 20px;
+  z-index: -1;
+}
+table tr {
+  vertical-align: middle;
+}
+table tr td button {
+  padding: 2px 8px !important;
+  margin-right: 4px;
+}
+table tr td button:last-child {
+  margin-right: 0px;
+}
 @media (max-width: 992px) {
   h1 {
     font-size: 1.25rem;

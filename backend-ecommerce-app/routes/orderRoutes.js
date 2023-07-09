@@ -5,7 +5,7 @@ import {
   getUserOrders,
   updateOrderToPaid,
 } from '../controllers/orderController.js'
-import verifyToken from '../middleware/authMiddleware.js'
+import { verifyToken } from '../middleware/authMiddleware.js'
 
 const orderRouter = Router()
 

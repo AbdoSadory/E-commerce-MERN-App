@@ -148,7 +148,6 @@ export const updateProfile = createAsyncThunk(
         },
       })
       .then((res) => {
-        console.log('done update;')
         toast.success(`Your Profile Has Been Updated ${res.data.name}`, {
           position: 'top-right',
           autoClose: 3000,
@@ -212,16 +211,6 @@ export const userSlice = createSlice({
         errorMessage: '',
       }
     },
-    // addOrders(state, payload) {
-    //   const result = {
-    //     ...state,
-    //     user: {
-    //       ...state.user,
-    //       orders: payload.payload,
-    //     },
-    //   }
-    //   return result
-    // },
   },
   extraReducers: (builder) => {
     builder.addCase(logIn.fulfilled, (state, payload) => {

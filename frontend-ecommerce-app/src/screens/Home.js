@@ -1,29 +1,29 @@
-import React, { useEffect } from 'react'
-import { Row, Col } from 'react-bootstrap'
-import Product from '../components/product/Product'
-import { useDispatch, useSelector } from 'react-redux'
-import { allProducts } from '../redux/slices/productsSlice'
-import { ToastContainer } from 'react-toastify'
-import Loader from '../components/messages/Loader'
-import Message from '../components/messages/Message'
+import React, { useEffect } from "react";
+import { Row, Col } from "react-bootstrap";
+import Product from "../components/product/Product";
+import { useDispatch, useSelector } from "react-redux";
+import { allProducts } from "../redux/slices/productsSlice";
+import { ToastContainer } from "react-toastify";
+import Loader from "../components/messages/Loader";
+import Message from "../components/messages/Message";
 
 const Home = () => {
-  const productsSliceData = useSelector((state) => state.products)
-  const dispatch = useDispatch()
+  const productsSliceData = useSelector((state) => state.products);
+  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(allProducts())
-  }, [])
+    dispatch(allProducts());
+  }, []);
   return (
     <>
       <h1 className="text-center m-0">Welcome to our Project</h1>
       <h2 className="mt-2">Latest Products</h2>
-      <Row className="justify-content-between">
+      <Row className="">
         {productsSliceData.isloading ? (
           <Loader />
         ) : productsSliceData.error ? (
           <h3 className="text-center text-dark text-capitalize">
             <Message
-              variant={'primary'}
+              variant={"primary"}
               message={productsSliceData && productsSliceData.errorMessage}
             />
           </h3>
@@ -48,7 +48,7 @@ const Home = () => {
       </Row>
       <ToastContainer autoClose={2000} />
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
