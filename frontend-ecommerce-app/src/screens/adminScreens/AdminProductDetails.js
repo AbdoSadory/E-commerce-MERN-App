@@ -18,6 +18,7 @@ import {
 import Message from "../../components/messages/Message";
 import { updateProduct } from "../../redux/slices/adminSlice";
 import { ToastContainer } from "react-toastify";
+import axios from "axios";
 
 const AdminProductDetails = () => {
   let params = useParams();
@@ -28,6 +29,7 @@ const AdminProductDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
+  const [uploading, setUploading] = useState(false);
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
@@ -64,6 +66,24 @@ const AdminProductDetails = () => {
         setIsLoading(false);
       }
     });
+  };
+  const uploadFileHandler = async (e) => {
+    setUploading(true);
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+    try {
+      await axios
+        .post("/api/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          setImage(res.data);
+          setUploading(false);
+        });
+    } catch (error) {}
   };
   useEffect(() => {
     dispatch(getProductDetails(params.id)).then((res) => {
@@ -368,24 +388,29 @@ const AdminProductDetails = () => {
                       />
                     </Col>
                   </Form.Group>
-                  {/* <Form.Group as={Row} className="m-auto" controlId="image">
-                    <Form.Label column sm="2">
-                      Image
-                    </Form.Label>
-                    <Col sm="10">
-                      <Form.Control
-                        className="mb-2"
-                        type="file"
-                        accept="image/*"
-                        placeholder="Product Image"
-                        name="image"
-                        value={image}
-                        onChange={(e) => {
-                          setImage(e.target.value);
-                        }}
-                      />
-                    </Col>
-                  </Form.Group> */}
+                  <Form.Group controlId="formFile" className="mb-3">
+                    <Form.Control
+                      type="file"
+                      onChange={(e) => {
+                        uploadFileHandler(e);
+                      }}
+                      accept="image/*"
+                    />
+                    {uploading && (
+                      <div className="text-center m-1">
+                        <Spinner
+                          animation="border"
+                          variant="warning"
+                          style={{
+                            width: "20px",
+                            height: "20px",
+                            borderWidth: "2px",
+                            animationDuration: "0.5s",
+                          }}
+                        />
+                      </div>
+                    )}
+                  </Form.Group>
                   <div className="text-center m-auto">
                     <Button
                       type="submit"
