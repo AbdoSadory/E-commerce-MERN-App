@@ -80,10 +80,14 @@ const AdminProductDetails = () => {
           },
         })
         .then((res) => {
+          console.log(res.data);
           setImage(res.data);
           setUploading(false);
         });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      setUploading(false);
+    }
   };
   useEffect(() => {
     dispatch(getProductDetails(params.id)).then((res) => {

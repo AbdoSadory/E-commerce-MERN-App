@@ -70,9 +70,7 @@ const AllProducts = () => {
                 <th>#</th>
                 <th>ID</th>
                 <th>name</th>
-                <th>price</th>
-                <th>category</th>
-                <th>brand</th>
+
                 <th>Operations</th>
               </tr>
             </thead>
@@ -83,9 +81,7 @@ const AllProducts = () => {
                     <td>{index + 1}</td>
                     <td>{product._id}</td>
                     <td>{product.name}</td>
-                    <td>{product.price}</td>
-                    <td>{product.category}</td>
-                    <td>{product.brand}</td>
+
                     <td>
                       <LinkContainer to={`/admin/product/${product._id}/edit`}>
                         <button className="btn btn-light">
