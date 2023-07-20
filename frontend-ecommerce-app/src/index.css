@@ -159,6 +159,7 @@ table tr td button:last-child {
   }
   .ordersTable {
     font-size: 10px;
+    text-wrap: balance;
   }
 }
 
@@ -168,6 +169,15 @@ table tr td button:last-child {
   }
   .processStep {
     font-size: 12px;
+  }
+
+  .operationBtn {
+    padding: 0px 4px !important;
+  }
+  .operationBtn svg {
+    vertical-align: middle;
+    width: 0.5rem;
+    height: 0.5rem;
   }
 }
 @media (max-width: 375px) {
@@ -179,5 +189,13 @@ table tr td button:last-child {
   }
   .tabsSection ul li button {
     font-size: 10px;
+  }
+  .operationBtn {
+    padding: 0px 4px !important;
+  }
+  .operationBtn svg {
+    vertical-align: middle;
+    width: 0.5rem;
+    height: 0.5rem;
   }
 }

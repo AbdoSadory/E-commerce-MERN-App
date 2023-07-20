@@ -20,6 +20,7 @@ import AllUsers from "./screens/adminScreens/AllUsers";
 import AllProducts from "./screens/adminScreens/AllProducts";
 import UserDetails from "./screens/adminScreens/UserDetails";
 import AdminProductDetails from "./screens/adminScreens/AdminProductDetails";
+import AllOrders from "./screens/adminScreens/AllOrders";
 
 function App() {
   const userSliceData = useSelector((state) => state.user);
@@ -63,6 +64,15 @@ function App() {
               {userSliceData.isLogIn && userSliceData.user.isAdmin && (
                 <Route
                   path="/admin/product/:id/edit"
+                  Component={AdminProductDetails}
+                />
+              )}
+              {userSliceData.isLogIn && userSliceData.user.isAdmin && (
+                <Route path="/admin/orders" Component={AllOrders} />
+              )}
+              {userSliceData.isLogIn && userSliceData.user.isAdmin && (
+                <Route
+                  path="/admin/order/:id/edit"
                   Component={AdminProductDetails}
                 />
               )}

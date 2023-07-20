@@ -40,7 +40,7 @@ const AllUsers = () => {
               <tr>
                 <th>#</th>
                 <th>ID</th>
-                <th>name</th>
+
                 <th>email</th>
                 <th>admin</th>
                 <th>operations</th>
@@ -53,7 +53,6 @@ const AllUsers = () => {
                   <tr key={user._id} className="">
                     <td>{index + 1}</td>
                     <td>{user._id}</td>
-                    <td>{user.name}</td>
                     <td>
                       <a href={`mailto:${user.email}`}>{user.email}</a>
                     </td>
@@ -82,7 +81,7 @@ const AllUsers = () => {
                     </td>
                     <td>
                       <LinkContainer to={`/admin/user/${user._id}/edit`}>
-                        <button className="btn btn-light">
+                        <button className="operationBtn btn btn-light">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="1em"
@@ -95,7 +94,7 @@ const AllUsers = () => {
                         </button>
                       </LinkContainer>
                       <button
-                        className="btn btn-light"
+                        className="operationBtn btn btn-light"
                         onClick={() => {
                           deleteHandler(user._id);
                         }}

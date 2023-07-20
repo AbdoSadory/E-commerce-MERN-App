@@ -254,7 +254,7 @@ const AdminProductDetails = () => {
                         name="brand"
                         value={brand}
                         onChange={(e) => {
-                          setBrand(e.target.value.toLowerCase);
+                          setBrand(e.target.value);
                         }}
                       />
                     </Col>
@@ -271,7 +271,7 @@ const AdminProductDetails = () => {
                         name="category"
                         value={category}
                         onChange={(e) => {
-                          setCategory(e.target.value.toLowerCase);
+                          setCategory(e.target.value);
                         }}
                       />
                     </Col>
@@ -308,7 +308,6 @@ const AdminProductDetails = () => {
                         placeholder="Rating"
                         name="rating"
                         value={rating}
-                        min="0"
                         onChange={(e) => {
                           setRating(e.target.value);
                         }}
@@ -330,7 +329,6 @@ const AdminProductDetails = () => {
                         placeholder="Number of Reviews"
                         name="numReviews"
                         value={numReviews}
-                        min="0"
                         onChange={(e) => {
                           setNumReviews(e.target.value);
                         }}
@@ -348,8 +346,6 @@ const AdminProductDetails = () => {
                         placeholder="Price"
                         name="price"
                         value={price}
-                        min="0"
-                        step="0.01"
                         onChange={(e) => {
                           setPrice(e.target.value);
                         }}
@@ -371,7 +367,6 @@ const AdminProductDetails = () => {
                         placeholder="Avialable In Stock"
                         name="countInStock"
                         value={countInStock}
-                        min="0"
                         onChange={(e) => {
                           setCountInStock(e.target.value);
                         }}

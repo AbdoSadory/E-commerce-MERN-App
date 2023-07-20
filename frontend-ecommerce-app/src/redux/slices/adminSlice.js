@@ -361,6 +361,107 @@ export const updateProduct = createAsyncThunk(
     return data;
   }
 );
+
+export const getOrders = createAsyncThunk(
+  "admin/getOrders",
+  async (adminDetails) => {
+    const data = await axios
+      .get("/api/orders/admin/orders", {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${adminDetails.token}`,
+        },
+      })
+      .then((res) => {
+        toast.success(`Orders have been fetched`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        return {
+          admin: { orders: res.data },
+          isloading: false,
+          error: false,
+          errorMessage: "",
+        };
+      })
+      .catch((e) => {
+        toast.error("Failed to fetch orders", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        return {
+          isloading: false,
+          error: true,
+          errorMessage: e.response.data,
+        };
+      });
+    return data;
+  }
+);
+export const updateOrderToDelivered = createAsyncThunk(
+  "order/updateOrderToDelivered",
+  async (OrderDetails) => {
+    const data = await axios
+      .patch(
+        `/api/orders/admin/order/${OrderDetails.orderId}/delivery`,
+        OrderDetails,
+        {
+          headers: {
+            authorization: `Bearer ${OrderDetails.token}`,
+          },
+        }
+      )
+      .then((res) => {
+        toast.success(`Order has been updated to be delivered `, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+
+        return {
+          admin: { orders: res.data },
+          isloading: false,
+          error: false,
+          errorMessage: "",
+        };
+      })
+      .catch((e) => {
+        toast.error("Couldn't update the order", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        return {
+          isloading: false,
+          error: true,
+          success: false,
+        };
+      });
+    return data;
+  }
+);
 export const adminSlice = createSlice({
   name: "admin",
   initialState,
@@ -412,6 +513,20 @@ export const adminSlice = createSlice({
       return { ...state, ...payload.payload };
     });
     builder.addCase(updateProduct.rejected, (state, payload) => {
+      return { ...state, ...payload.payload };
+    });
+    // =======
+    builder.addCase(getOrders.fulfilled, (state, payload) => {
+      return { ...state, ...payload.payload };
+    });
+    builder.addCase(getOrders.rejected, (state, payload) => {
+      return { ...state, ...payload.payload };
+    });
+    // =======
+    builder.addCase(updateOrderToDelivered.fulfilled, (state, payload) => {
+      return { ...state, ...payload.payload };
+    });
+    builder.addCase(updateOrderToDelivered.rejected, (state, payload) => {
       return { ...state, ...payload.payload };
     });
     // =======

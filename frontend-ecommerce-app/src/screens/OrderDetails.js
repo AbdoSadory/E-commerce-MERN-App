@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Button,
   Card,
@@ -8,26 +8,27 @@ import {
   ListGroup,
   Row,
   Spinner,
-} from 'react-bootstrap'
-import { ToastContainer } from 'react-toastify'
-import Loader from '../components/messages/Loader'
-import ErrorMessage from '../components/messages/Message'
-import { useDispatch, useSelector } from 'react-redux'
-import { getOrder, updateOrderToPaid } from '../redux/slices/orderSlice.js'
-import EmptyCart from '../components/messages/EmptyCart'
-import Message from '../components/messages/Message'
+} from "react-bootstrap";
+import { ToastContainer } from "react-toastify";
+import Loader from "../components/messages/Loader";
+import ErrorMessage from "../components/messages/Message";
+import { useDispatch, useSelector } from "react-redux";
+import { getOrder, updateOrderToPaid } from "../redux/slices/orderSlice.js";
+import EmptyCart from "../components/messages/EmptyCart";
+import Message from "../components/messages/Message";
+import { updateOrderToDelivered } from "../redux/slices/adminSlice";
 
 const OrderDetails = () => {
-  let params = useParams()
-  const orderSliceData = useSelector((state) => state.order)
-  const userSliceData = useSelector((state) => state.user)
-  const [isLoading, setIsLoading] = useState(orderSliceData.isloading)
-
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  let params = useParams();
+  const orderSliceData = useSelector((state) => state.order);
+  const userSliceData = useSelector((state) => state.user);
+  const [isLoading, setIsLoading] = useState(orderSliceData.isloading);
+  const [updatingDelivery, setUpdatingDelivery] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const updateOrderToPay = (e) => {
-    setIsLoading(true)
-    e.preventDefault()
+    setIsLoading(true);
+    e.preventDefault();
     dispatch(
       updateOrderToPaid({
         orderId: orderSliceData.order._id,
@@ -35,26 +36,43 @@ const OrderDetails = () => {
       })
     )
       .then((res) => {
-        setIsLoading(false)
-        window.location.reload(true)
+        setIsLoading(false);
+        window.location.reload(true);
       })
       .catch((e) => {
-        console.log(e.message)
-        setIsLoading(false)
+        console.log(e.message);
+        setIsLoading(false);
+      });
+  };
+  const updateOrderToDeliveredHandler = (e) => {
+    setUpdatingDelivery(true);
+    e.preventDefault();
+    dispatch(
+      updateOrderToDelivered({
+        orderId: orderSliceData.order._id,
+        token: userSliceData.user.token,
       })
-  }
+    )
+      .then((res) => {
+        window.location.reload(true);
+        setUpdatingDelivery(false);
+      })
+      .catch((e) => {
+        setUpdatingDelivery(false);
+      });
+  };
   useEffect(() => {
-    setIsLoading(true)
+    setIsLoading(true);
     if (!orderSliceData.order || orderSliceData.order._id !== params.id) {
       dispatch(
         getOrder({ orderId: params.id, token: userSliceData.user.token })
       ).then((res) => {
-        setIsLoading(false)
-      })
+        setIsLoading(false);
+      });
     } else {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [params.id])
+  }, [params.id]);
 
   return (
     <>
@@ -63,7 +81,7 @@ const OrderDetails = () => {
       ) : orderSliceData.error ? (
         <h3 className="text-center text-dark text-capitalize">
           <ErrorMessage
-            variant={'primary'}
+            variant={"primary"}
             message={orderSliceData.errorMessage}
           />
         </h3>
@@ -105,14 +123,37 @@ const OrderDetails = () => {
               }
             />
           ) : (
-            <Message
-              variant="danger"
-              message={
-                <span className="text-capitalize fw-bold text-dark fs-5">
-                  Not Delivered Yet
-                </span>
-              }
-            />
+            <>
+              <Message
+                variant="danger"
+                message={
+                  <span className="text-capitalize fw-bold text-dark fs-5">
+                    Not Delivered Yet
+                  </span>
+                }
+              />
+              {userSliceData.user.isAdmin && (
+                <Button
+                  onClick={updateOrderToDeliveredHandler}
+                  className="mb-2"
+                >
+                  {updatingDelivery ? (
+                    <Spinner
+                      animation="border"
+                      variant="warning"
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        borderWidth: "2px",
+                        animationDuration: "0.5s",
+                      }}
+                    ></Spinner>
+                  ) : (
+                    "Delivered"
+                  )}
+                </Button>
+              )}
+            </>
           )}
 
           <Row>
@@ -122,13 +163,13 @@ const OrderDetails = () => {
                   <h2 className="text-dark">Shipping</h2>
                   <p>
                     <span className="text-capitalize fw-bold">
-                      full address:{' '}
+                      full address:{" "}
                     </span>
                     {`${orderSliceData.order.shippingAddress.address}, ${orderSliceData.order.shippingAddress.city}, ${orderSliceData.order.shippingAddress.country}`}
                   </p>
                   <p>
                     <span className="text-capitalize fw-bold">
-                      postal code:{' '}
+                      postal code:{" "}
                     </span>
                     {`${orderSliceData.order.shippingAddress.postalCode}`}
                   </p>
@@ -179,7 +220,7 @@ const OrderDetails = () => {
                   ) : (
                     <EmptyCart
                       variant="danger"
-                      message={'No Products In The Cart'}
+                      message={"No Products In The Cart"}
                     />
                   )}
                 </ListGroup.Item>
@@ -242,14 +283,14 @@ const OrderDetails = () => {
                           animation="border"
                           variant="warning"
                           style={{
-                            width: '20px',
-                            height: '20px',
-                            borderWidth: '2px',
-                            animationDuration: '0.5s',
+                            width: "20px",
+                            height: "20px",
+                            borderWidth: "2px",
+                            animationDuration: "0.5s",
                           }}
                         ></Spinner>
                       ) : (
-                        'Pay'
+                        "Pay"
                       )}
                     </Button>
                   </ListGroup.Item>
@@ -261,7 +302,7 @@ const OrderDetails = () => {
       )}
       <ToastContainer autoClose={2000} />
     </>
-  )
-}
+  );
+};
 
-export default OrderDetails
+export default OrderDetails;

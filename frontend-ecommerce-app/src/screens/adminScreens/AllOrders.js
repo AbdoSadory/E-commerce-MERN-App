@@ -2,18 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { ToastContainer } from "react-toastify";
-import { allProducts } from "../../redux/slices/productsSlice";
 import Loader from "../../components/messages/Loader";
 import Message from "../../components/messages/Message";
 import { Button, Col, Row, Table } from "react-bootstrap";
-import { addProduct, deleteProduct } from "../../redux/slices/adminSlice";
-import AddProductModal from "../../components/product/AddProductModal.jsx";
+import { deleteProduct, getOrders } from "../../redux/slices/adminSlice";
 
-const AllProducts = () => {
+const AllOrders = () => {
   const userSliceData = useSelector((state) => state.user);
-  const productsSliceData = useSelector((state) => state.products);
+  const adminSliceData = useSelector((state) => state.admin);
   const [isLoading, setIsLoading] = useState(true);
-  const [modalShow, setModalShow] = React.useState(false);
   const dispatch = useDispatch();
   const deleteHandler = (userID) => {
     dispatch(
@@ -22,7 +19,7 @@ const AllProducts = () => {
   };
 
   useEffect(() => {
-    dispatch(allProducts()).then((res) => {
+    dispatch(getOrders({ token: userSliceData.user.token })).then((res) => {
       setIsLoading(false);
     });
   }, []);
@@ -30,18 +27,11 @@ const AllProducts = () => {
     <>
       {isLoading ? (
         <Loader />
-      ) : productsSliceData.error ? (
-        <Message variant="danger" message={productsSliceData.errorMessage} />
+      ) : adminSliceData.error ? (
+        <Message variant="danger" message={adminSliceData.errorMessage} />
       ) : (
         <section>
-          <Row className="mb-2 align-items-center">
-            <Col sm="12" md="6">
-              <h2 className="m-0">Products</h2>
-            </Col>
-            <Col className="text-end" sm="12" md="6">
-              <Button onClick={() => setModalShow(true)}>+ Add Product</Button>
-            </Col>
-          </Row>
+          <h2 className="m-0">Orders</h2>
           <Table
             striped
             bordered
@@ -53,21 +43,43 @@ const AllProducts = () => {
               <tr>
                 <th>#</th>
                 <th>ID</th>
-                <th>name</th>
+                <th>Client Email</th>
 
                 <th>Operations</th>
               </tr>
             </thead>
             <tbody>
-              {productsSliceData.products.length ? (
-                productsSliceData.products.map((product, index) => (
-                  <tr key={product._id} className="">
+              {adminSliceData.admin.orders.length ? (
+                adminSliceData.admin.orders.map((order, index) => (
+                  <tr key={order._id} className="">
                     <td>{index + 1}</td>
-                    <td>{product._id}</td>
-                    <td>{product.name}</td>
-
+                    <td>{order._id}</td>
+                    <td>{order.user.email}</td>
+                    {/* <td>
+                      {order.isDelivered ? (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="1em"
+                          height="1em"
+                          fill="lime"
+                          viewBox="0 0 512 512"
+                        >
+                          <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z" />
+                        </svg>
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="1em"
+                          height="1em"
+                          fill="yellow"
+                          viewBox="0 0 512 512"
+                        >
+                          <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z" />
+                        </svg>
+                      )}
+                    </td> */}
                     <td>
-                      <LinkContainer to={`/admin/product/${product._id}/edit`}>
+                      <LinkContainer to={`/order/${order._id}/`}>
                         <button className="operationBtn btn btn-light">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -83,7 +95,7 @@ const AllProducts = () => {
                       <button
                         className="operationBtn btn btn-light"
                         onClick={() => {
-                          deleteHandler(product._id);
+                          deleteHandler(order._id);
                         }}
                       >
                         <svg
@@ -108,10 +120,6 @@ const AllProducts = () => {
               )}
             </tbody>
           </Table>
-          <AddProductModal
-            show={modalShow}
-            onHide={() => setModalShow(false)}
-          />
         </section>
       )}
       <ToastContainer autoClose={2000} />
@@ -119,4 +127,4 @@ const AllProducts = () => {
   );
 };
 
-export default AllProducts;
+export default AllOrders;
