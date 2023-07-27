@@ -1,7 +1,8 @@
 import { Router } from "express";
 import {
+  addReviewProduct,
   createProduct,
-  deletProduct,
+  deleteProduct,
   getProductByID,
   getProducts,
   updateProduct,
@@ -17,7 +18,8 @@ productRouter
 productRouter
   .route("/:id")
   .get(getProductByID)
-  .delete(verifyToken, admin, deletProduct)
+  .delete(verifyToken, admin, deleteProduct)
   .put(verifyToken, admin, updateProduct);
 
+productRouter.route("/:id/review").post(verifyToken, addReviewProduct);
 export default productRouter;

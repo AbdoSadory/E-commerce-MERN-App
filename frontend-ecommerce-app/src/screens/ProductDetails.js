@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Breadcrumb,
   Button,
@@ -9,32 +9,60 @@ import {
   ListGroup,
   ListGroupItem,
   Row,
-} from 'react-bootstrap'
-import { LinkContainer } from 'react-router-bootstrap'
-import { ToastContainer } from 'react-toastify'
-import Loader from '../components/messages/Loader'
-import ProductRating from '../components/rating/Rating'
-import { useDispatch, useSelector } from 'react-redux'
-import { getProductDetails } from '../redux/slices/productDetailsSlice'
-import { addItem } from '../redux/slices/cartSlice'
-import Message from '../components/messages/Message'
+} from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
+import { ToastContainer } from "react-toastify";
+import Loader from "../components/messages/Loader";
+import ProductRating from "../components/rating/Rating";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addReviewToProduct,
+  getProductDetails,
+} from "../redux/slices/productDetailsSlice";
+import { addItem } from "../redux/slices/cartSlice";
+import Message from "../components/messages/Message";
 
 const ProductDetails = () => {
-  const [qty, setQty] = useState(1)
-  let params = useParams()
-  const productDetailsSliceData = useSelector((state) => state.productDetails)
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const [qty, setQty] = useState(1);
+  const [rating, setRating] = useState("");
+  const [comment, setComment] = useState("");
+  const [userReviewed, setUserReviewed] = useState(false);
+  let params = useParams();
+  const productDetailsSliceData = useSelector((state) => state.productDetails);
+  const userSliceData = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
-    dispatch(getProductDetails(params.id))
-  }, [])
+    dispatch(getProductDetails(params.id)).then((res) => {
+      let isUserReviewed = res.payload.product.reviews.find(
+        (review) => review.user === userSliceData.user.id
+      );
+      setUserReviewed(isUserReviewed);
+    });
+  }, []);
 
   const addToCartHandler = () => {
     dispatch(
       addItem({ product: productDetailsSliceData.product, qty: Number(qty) })
-    )
-    navigate(`/cart/${params.id}/?qty=${qty}`)
-  }
+    );
+    navigate(`/cart/${params.id}/?qty=${qty}`);
+  };
+  const addReview = (e) => {
+    e.preventDefault();
+    console.log(rating, comment);
+    if (rating && comment) {
+      dispatch(
+        addReviewToProduct({
+          token: userSliceData.user.token,
+          productId: params.id,
+          rating,
+          comment,
+        })
+      )
+        .then((res) => window.location.reload())
+        .catch((err) => console.log(err.message));
+    }
+  };
   return (
     <>
       {productDetailsSliceData.isloading ? (
@@ -42,7 +70,7 @@ const ProductDetails = () => {
       ) : productDetailsSliceData.error ? (
         <h3 className="text-center text-dark text-capitalize">
           <Message
-            variant={'primary'}
+            variant={"primary"}
             message={productDetailsSliceData.errorMessage}
           />
         </h3>
@@ -77,7 +105,7 @@ const ProductDetails = () => {
                     </h1>
                   </ListGroupItem>
                   <ListGroupItem as="li">
-                    <span className="fw-bold">Description</span> :{' '}
+                    <span className="fw-bold">Description</span> :{" "}
                     {productDetailsSliceData.product.description}
                   </ListGroupItem>
                   <ListGroupItem as="li">
@@ -92,7 +120,7 @@ const ProductDetails = () => {
                     as="li"
                     className=" border-light border-bottom border-bottom-4"
                   >
-                    <span className="fw-bold">Price</span> :{' '}
+                    <span className="fw-bold">Price</span> :{" "}
                     {productDetailsSliceData.product.price}
                   </ListGroupItem>
                   <ListGroupItem
@@ -147,7 +175,7 @@ const ProductDetails = () => {
                               <option
                                 key={x}
                                 value={x + 1}
-                                style={{ color: 'blue' }}
+                                style={{ color: "blue" }}
                               >
                                 {x + 1}
                               </option>
@@ -174,6 +202,87 @@ const ProductDetails = () => {
                 </ListGroup>
               </Col>
             </Row>
+            <Row>
+              <Col className="mt-3" md="6">
+                <h3>Reviews</h3>
+                <ListGroup className="reviewList m-0 p-1">
+                  {productDetailsSliceData.product.reviews.length ? (
+                    productDetailsSliceData.product.reviews.map((review) => (
+                      <ListGroupItem key={review._id} className="rounded-3 p-2">
+                        <h4 className="m-0">{review.name}</h4>
+                        <ProductRating rating={review.rating} text={``} />
+                        <p className="m-0">{review.comment}</p>
+                        <p className="m-0">
+                          <span className="fw-bold">Created at:</span>{" "}
+                          {review.createdAt.substring(0, 10)}
+                        </p>
+                      </ListGroupItem>
+                    ))
+                  ) : (
+                    <Message variant="danger" message="No Reviews Yet" />
+                  )}
+                </ListGroup>
+              </Col>
+              <Col className="mt-3">
+                <h3 className="text-capitalize">write a review</h3>
+                <ListGroup className="m-0 p-1">
+                  <ListGroupItem className="p-2">
+                    {!userSliceData.isLogIn ? (
+                      <div className="text-center text-capitalize">
+                        please{" "}
+                        <Link
+                          to="/login"
+                          className="text-dark fw-bold text-decoration-underline"
+                        >
+                          Login
+                        </Link>
+                      </div>
+                    ) : userReviewed ? (
+                      <p className="m-0 p-0 text-capitalize">
+                        you're already reviewed this product
+                      </p>
+                    ) : (
+                      <Form
+                        onSubmit={(e) => {
+                          addReview(e);
+                        }}
+                      >
+                        <Form.Group controlId="rating">
+                          <Form.Label>Rating</Form.Label>
+                          <Form.Control
+                            as="input"
+                            type="number"
+                            min="0"
+                            max="5"
+                            value={rating}
+                            onChange={(e) => {
+                              setRating(e.target.value);
+                            }}
+                            required
+                          ></Form.Control>
+                        </Form.Group>
+                        <Form.Group controlId="comment">
+                          <Form.Label>Comment</Form.Label>
+                          <Form.Control
+                            as="textarea"
+                            min="15"
+                            max="150"
+                            value={comment}
+                            onChange={(e) => {
+                              setComment(e.target.value);
+                            }}
+                            required
+                          ></Form.Control>
+                        </Form.Group>
+                        <div className="text-center mt-2">
+                          <Button type="submit">Add</Button>
+                        </div>
+                      </Form>
+                    )}
+                  </ListGroupItem>
+                </ListGroup>
+              </Col>
+            </Row>
           </section>
         </>
       ) : (
@@ -181,7 +290,7 @@ const ProductDetails = () => {
       )}
       <ToastContainer autoClose={2000} />
     </>
-  )
-}
+  );
+};
 
-export default ProductDetails
+export default ProductDetails;

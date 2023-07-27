@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Product from "../models/productModel.js";
+import User from "../models/userModel.js";
 import mongoose from "mongoose";
 // @desc    Fetch All Products
 // @route   /api/products/
@@ -25,7 +26,7 @@ const getProductByID = asyncHandler(async (req, res) => {
 // @desc    Delete product
 // @route   Delete /api/products/:id
 // @access  Private / admin
-const deletProduct = asyncHandler(async (req, res) => {
+const deleteProduct = asyncHandler(async (req, res) => {
   const product = await Product.findByIdAndDelete(req.params.id);
   res.status(200).send(product);
 });
@@ -77,10 +78,60 @@ const updateProduct = asyncHandler(async (req, res) => {
     throw new Error("Can't update the product");
   }
 });
+
+// @desc    Add comment to product
+// @route   POST /api/products/:id/review
+// @access  Private
+const addReviewProduct = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+  const user = await User.findById(req.userDecodedToken.id);
+
+  if (product) {
+    console.log("product is existed");
+    const alreadyReviewed = product.reviews.find(
+      (review) => review.user.toString() === req.userDecodedToken.id
+    );
+    if (alreadyReviewed) {
+      console.log("review is existed");
+      res.status(400);
+      throw new Error("The product is already reviewd");
+    }
+    const review = {
+      name: user.name,
+      rating: Number(req.body.rating),
+      comment: req.body.comment,
+      user: req.userDecodedToken.id,
+    };
+    product.reviews.push(review);
+    const newProduct = await Product.updateOne(
+      { _id: req.params.id },
+      {
+        $set: {
+          reviews: product.reviews,
+          numReviews: product.reviews.length,
+          rating:
+            product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+            product.reviews.length,
+        },
+      }
+    );
+    if (newProduct.acknowledged) {
+      const product = await Product.findById(req.params.id);
+      res.status(200).send(product);
+    } else {
+      res.status(400);
+      throw new Error("Can't add review to the product");
+    }
+  } else {
+    res.status(400);
+    throw new Error("Can't find the product");
+  }
+});
 export {
   getProducts,
   getProductByID,
-  deletProduct,
+  deleteProduct,
   createProduct,
   updateProduct,
+  addReviewProduct,
 };
