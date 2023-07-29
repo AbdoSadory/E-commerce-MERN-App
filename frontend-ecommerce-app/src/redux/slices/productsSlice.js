@@ -1,69 +1,69 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
-import { toast } from 'react-toastify'
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import { toast } from "react-toastify";
 const initialState = {
   products: [],
   isloading: true,
   error: false,
-  errorMessage: '',
-}
+  errorMessage: "",
+};
 // console.log('hi from Product Slice', initialState)
 export const allProducts = createAsyncThunk(
-  'products/allProducts',
-  async () => {
+  "products/allProducts",
+  async (keyword = "") => {
     const data = await axios
-      .get('/api/products')
+      .get(`/api/products?keyword=${keyword}`)
       .then((res) => {
-        toast.success('Products have been fetched', {
-          position: 'top-right',
+        toast.success("Products have been fetched", {
+          position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'light',
-        })
+          theme: "light",
+        });
         return {
           products: res.data,
           isloading: false,
           error: false,
-          errorMessage: '',
-        }
+          errorMessage: "",
+        };
       })
       .catch((e) => {
-        toast.error('Failed to fetch products', {
-          position: 'top-right',
+        toast.error("Failed to fetch products", {
+          position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'dark',
-        })
-        console.log(e)
+          theme: "dark",
+        });
+        console.log(e);
         return {
           products: [],
           isloading: false,
           error: true,
           errorMessage: e.response.data.message,
-        }
-      })
-    return data
+        };
+      });
+    return data;
   }
-)
+);
 
 export const productsSlice = createSlice({
-  name: 'products',
+  name: "products",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(allProducts.fulfilled, (state, payload) => {
-      return { ...state, ...payload.payload }
-    })
+      return { ...state, ...payload.payload };
+    });
     builder.addCase(allProducts.rejected, (state, payload) => {
-      return { ...state, ...payload.payload }
-    })
+      return { ...state, ...payload.payload };
+    });
   },
-})
+});

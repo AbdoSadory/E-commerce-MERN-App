@@ -32,6 +32,7 @@ function App() {
           <Container>
             <Routes>
               <Route path="/" Component={Home} exact />
+              <Route path="/search/:keyword" Component={Home} />
               <Route path="/product/:id" Component={ProductDetails} />
               <Route path="/cart/:id?" Component={Cart} />
               {!userSliceData.isLogIn && (

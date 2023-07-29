@@ -1,19 +1,32 @@
-import React, { useRef } from 'react'
-import { Container, Nav, NavDropdown, Navbar } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import { LinkContainer } from 'react-router-bootstrap'
-import { useNavigate } from 'react-router-dom'
-import { logout } from '../../redux/slices/userSlice'
+import React, { useRef } from "react";
+import {
+  Button,
+  Container,
+  Form,
+  Nav,
+  NavDropdown,
+  Navbar,
+} from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { LinkContainer } from "react-router-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
+import { logout } from "../../redux/slices/userSlice";
 
 const Header = () => {
-  const navBarRef = useRef()
-  const navigate = useNavigate()
-  const userSliceData = useSelector((state) => state.user)
-  const dispatch = useDispatch()
+  const navBarRef = useRef();
+  const navigate = useNavigate();
+  const userSliceData = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  let params = useParams();
+  const searchHandler = (e) => {
+    e.preventDefault();
+    // if (!e.target.elements[0].value) return;
+    navigate(`/search/${e.target.elements[0].value.trim()}`);
+  };
   const logoutHandler = () => {
-    dispatch(logout())
-    navigate('/')
-  }
+    dispatch(logout());
+    navigate("/");
+  };
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" className="text-capitalize">
@@ -26,9 +39,21 @@ const Header = () => {
           <Navbar.Collapse ref={navBarRef} id="navbarScroll">
             <Nav
               className="ms-auto my-2 my-lg-0"
-              style={{ maxHeight: '100px' }}
+              style={{ maxHeight: "100px" }}
               navbarScroll
             >
+              <Form className="d-flex" onSubmit={(e) => searchHandler(e)}>
+                <Form.Control
+                  type="search"
+                  placeholder="Search"
+                  className="me-2"
+                  aria-label="Search"
+                  required
+                />
+                <Button type="submit" variant="outline-success">
+                  Search
+                </Button>
+              </Form>
               <LinkContainer to="/cart">
                 <Nav.Link>
                   <svg
@@ -63,7 +88,7 @@ const Header = () => {
                   </LinkContainer>
                   <NavDropdown.Item
                     onClick={(e) => {
-                      logoutHandler()
+                      logoutHandler();
                     }}
                   >
                     <svg
@@ -150,7 +175,7 @@ const Header = () => {
         </Container>
       </Navbar>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

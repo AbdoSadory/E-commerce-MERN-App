@@ -6,13 +6,15 @@ import { allProducts } from "../redux/slices/productsSlice";
 import { ToastContainer } from "react-toastify";
 import Loader from "../components/messages/Loader";
 import Message from "../components/messages/Message";
+import { useParams } from "react-router-dom";
 
 const Home = () => {
   const productsSliceData = useSelector((state) => state.products);
+  let params = useParams();
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(allProducts());
-  }, []);
+    dispatch(allProducts(params.keyword));
+  }, [params.keyword]);
   return (
     <>
       <h1 className="text-center m-0">Welcome to our Project</h1>
@@ -42,7 +44,7 @@ const Home = () => {
           ))
         ) : (
           <h3 className="text-center text-light text-capitalize">
-            No Products Yet on server....
+            No Products....
           </h3>
         )}
       </Row>
