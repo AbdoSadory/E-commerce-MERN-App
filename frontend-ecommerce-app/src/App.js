@@ -32,7 +32,13 @@ function App() {
           <Container>
             <Routes>
               <Route path="/" Component={Home} exact />
-              <Route path="/search/:keyword" Component={Home} />
+              <Route path="/search/:keyword" Component={Home} exact />
+              <Route path="/page/:pageNumber" Component={Home} exact />
+              <Route
+                path="/search/:keyword/page/:pageNumber"
+                Component={Home}
+                exact
+              />
               <Route path="/product/:id" Component={ProductDetails} />
               <Route path="/cart/:id?" Component={Cart} />
               {!userSliceData.isLogIn && (
@@ -60,7 +66,14 @@ function App() {
                 <Route path="/admin/user/:id/edit" Component={UserDetails} />
               )}
               {userSliceData.isLogIn && userSliceData.user.isAdmin && (
-                <Route path="/admin/products" Component={AllProducts} />
+                <Route path="/admin/products" Component={AllProducts} exact />
+              )}
+              {userSliceData.isLogIn && userSliceData.user.isAdmin && (
+                <Route
+                  path="/admin/products/page/:pageNumber"
+                  Component={AllProducts}
+                  exact
+                />
               )}
               {userSliceData.isLogIn && userSliceData.user.isAdmin && (
                 <Route

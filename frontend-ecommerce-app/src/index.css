@@ -116,6 +116,22 @@ table tr td button:last-child {
   list-style: none;
   color: black;
 }
+.carousel-item {
+  text-align: center;
+  position: unset;
+}
+.carousel-item img {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.carousel-item .carousel-caption {
+  position: unset;
+}
+.carousel-item .carousel-caption h2 {
+  font-size: 20px;
+}
 @media (max-width: 992px) {
   h1 {
     font-size: 1.25rem;
@@ -185,6 +201,13 @@ table tr td button:last-child {
     vertical-align: middle;
     width: 0.5rem;
     height: 0.5rem;
+  }
+  .carousel-item img {
+    width: 200px;
+    height: 200px;
+  }
+  .carousel-item .carousel-caption h2 {
+    font-size: 16px;
   }
 }
 @media (max-width: 375px) {

@@ -1,25 +1,80 @@
 import React, { useEffect } from "react";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Pagination, Carousel, Image } from "react-bootstrap";
 import Product from "../components/product/Product";
 import { useDispatch, useSelector } from "react-redux";
-import { allProducts } from "../redux/slices/productsSlice";
+import { allProducts, topProducts } from "../redux/slices/productsSlice";
 import { ToastContainer } from "react-toastify";
 import Loader from "../components/messages/Loader";
 import Message from "../components/messages/Message";
-import { useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
+import PaginationSection from "../components/pagination/Pagination";
 
 const Home = () => {
   const productsSliceData = useSelector((state) => state.products);
   let params = useParams();
+  let location = useLocation();
   const dispatch = useDispatch();
+  console.log(location);
   useEffect(() => {
-    dispatch(allProducts(params.keyword));
-  }, [params.keyword]);
+    dispatch(topProducts());
+    dispatch(
+      allProducts({
+        keyword: params.keyword || "",
+        page: Number(params.pageNumber) || 1,
+      })
+    );
+  }, [params.keyword, params.pageNumber]);
   return (
     <>
-      <h1 className="text-center m-0">Welcome to our Project</h1>
+      {(location.pathname === "/" || location.pathname === `/page/1`) && (
+        <h1 className="text-center m-0">Welcome to our Project</h1>
+      )}
+      {(location.pathname === "/" ||
+        location.pathname === `/page/${params.pageNumber}`) && (
+        <>
+          <section>
+            <h2 className="mt-2">Top Rated Products</h2>
+            <Carousel pause="hover">
+              {productsSliceData.topProducts.isloading ? (
+                <div className="my-4">
+                  <Loader />
+                </div>
+              ) : productsSliceData.topProducts.error ? (
+                <h3 className="text-center text-dark text-capitalize">
+                  <div className="my-4">
+                    <Message
+                      variant={"primary"}
+                      message={
+                        productsSliceData.topProducts &&
+                        productsSliceData.topProducts.errorMessage
+                      }
+                    />
+                  </div>
+                </h3>
+              ) : productsSliceData.topProducts.products.length ? (
+                productsSliceData.topProducts.products.map((product) => (
+                  <Carousel.Item key={product._id} className=" my-4">
+                    <Link to={`/product/${product._id}`}>
+                      <Image src={product.image} alt={product.name} fluid />
+                      <Carousel.Caption>
+                        <h2>
+                          {product.name} ({product.price})
+                        </h2>
+                      </Carousel.Caption>
+                    </Link>
+                  </Carousel.Item>
+                ))
+              ) : (
+                <h3 className="text-center text-light text-capitalize">
+                  No Products....
+                </h3>
+              )}
+            </Carousel>
+          </section>
+        </>
+      )}
       <h2 className="mt-2">Latest Products</h2>
-      <Row className="">
+      <Row>
         {productsSliceData.isloading ? (
           <Loader />
         ) : productsSliceData.error ? (
@@ -29,8 +84,8 @@ const Home = () => {
               message={productsSliceData && productsSliceData.errorMessage}
             />
           </h3>
-        ) : productsSliceData.products.length ? (
-          productsSliceData.products.map((product) => (
+        ) : productsSliceData.products.products.length ? (
+          productsSliceData.products.products.map((product) => (
             <Col key={product._id} sm={12} md={6} lg={4}>
               <Product
                 id={product._id}
@@ -48,6 +103,11 @@ const Home = () => {
           </h3>
         )}
       </Row>
+      <PaginationSection
+        pages={productsSliceData.products.pages}
+        page={productsSliceData.products.page}
+        keyword={params.keyword && params.keyword}
+      />
       <ToastContainer autoClose={2000} />
     </>
   );

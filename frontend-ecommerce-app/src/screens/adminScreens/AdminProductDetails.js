@@ -193,16 +193,18 @@ const AdminProductDetails = () => {
                   </ListGroupItem>
                   <ListGroupItem as="li" className="fw-bold text-dark m-1">
                     Reviews:{" "}
-                    <ListGroup className="text-center p-2">
+                    <ListGroup className="rounded p-2">
                       {productDetailsSliceData.product.reviews.length ? (
                         productDetailsSliceData.product.reviews.map(
-                          (review, index) => (
+                          (review) => (
                             <ListGroupItem
-                              key={index}
-                              as="li"
-                              className="fw-bold text-dark"
+                              key={review._id}
+                              as="div"
+                              className="fw-bold text-dark text-start rounded-0 border-bottom border-bottom-3 border-dark"
                             >
-                              {review}
+                              <p className="m-0">User ID: {review.user}</p>
+                              <p className="m-0">Rating: {review.rating}</p>
+                              <p className="m-0">Comment: {review.comment}</p>
                             </ListGroupItem>
                           )
                         )
@@ -309,6 +311,7 @@ const AdminProductDetails = () => {
                         name="rating"
                         value={rating}
                         min="0"
+                        step="0.01"
                         onChange={(e) => {
                           setRating(e.target.value);
                         }}

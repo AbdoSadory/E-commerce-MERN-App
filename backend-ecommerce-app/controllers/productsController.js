@@ -3,9 +3,22 @@ import Product from "../models/productModel.js";
 import User from "../models/userModel.js";
 import mongoose from "mongoose";
 // @desc    Fetch All Products
+// @route   /api/products/top-products
+// @access  Public
+const getTopProducts = asyncHandler(async (req, res) => {
+  const products = await Product.aggregate([
+    {
+      $match: { rating: { $gte: 3.7 } },
+    },
+  ]);
+  res.status(200).json({ status: "success", products });
+});
+// @desc    Fetch All Products
 // @route   /api/products/
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
+  const pageSize = 4;
+  const page = req.query.page || 1;
   const keyword = req.query.keyword
     ? {
         name: {
@@ -14,8 +27,11 @@ const getProducts = asyncHandler(async (req, res) => {
         },
       }
     : {};
-  const products = await Product.find({ ...keyword });
-  res.json(products);
+  const count = await Product.countDocuments({ ...keyword });
+  const products = await Product.find({ ...keyword })
+    .skip((page - 1) * pageSize)
+    .limit(pageSize);
+  res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
 // @desc    Fetch Product with id
@@ -53,6 +69,7 @@ const createProduct = asyncHandler(async (req, res) => {
     countInStock: req.body.countInStock,
     numReviews: req.body.numReviews,
     description: req.body.description,
+    rating: req.body.rating,
   });
   if (product.acknowledged) {
     const newProduct = await Product.findById(product.insertedId);
@@ -77,6 +94,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     countInStock: req.body.countInStock,
     numReviews: req.body.numReviews,
     description: req.body.description,
+    rating: req.body.rating,
   });
   if (product) {
     const newProduct = await Product.findById(product._id);
@@ -136,6 +154,7 @@ const addReviewProduct = asyncHandler(async (req, res) => {
   }
 });
 export {
+  getTopProducts,
   getProducts,
   getProductByID,
   deleteProduct,

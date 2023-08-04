@@ -5,11 +5,13 @@ import {
   deleteProduct,
   getProductByID,
   getProducts,
+  getTopProducts,
   updateProduct,
 } from "../controllers/productsController.js";
 import { admin, verifyToken } from "../middleware/authMiddleware.js";
 const productRouter = Router();
 
+productRouter.route("/top-products").get(getTopProducts);
 productRouter
   .route("/")
   .get(getProducts)

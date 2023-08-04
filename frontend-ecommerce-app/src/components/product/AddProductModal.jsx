@@ -116,7 +116,7 @@ const AddProductModal = (props) => {
                 value={brand}
                 required
                 onChange={(e) => {
-                  setBrand(e.target.value.toLowerCase);
+                  setBrand(e.target.value.toLowerCase());
                 }}
               />
             </Col>
@@ -134,7 +134,7 @@ const AddProductModal = (props) => {
                 value={category}
                 required
                 onChange={(e) => {
-                  setCategory(e.target.value.toLowerCase);
+                  setCategory(e.target.value.toLowerCase());
                 }}
               />
             </Col>
