@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import {
   Row,
   Col,
@@ -10,25 +10,26 @@ import {
   ListGroup,
   ListGroupItem,
   Table,
-} from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import { updateProfile } from '../redux/slices/userSlice'
-import { ToastContainer } from 'react-toastify'
-import Message from '../components/messages/Message'
-import { Link } from 'react-router-dom'
-import { getUserOrders } from '../redux/slices/orderSlice'
+} from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { updateProfile } from "../redux/slices/userSlice";
+import { ToastContainer } from "react-toastify";
+import Message from "../components/messages/Message";
+import { Link } from "react-router-dom";
+import { getUserOrders } from "../redux/slices/orderSlice";
+import HeadHelmet from "../components/helmet/HeadHelmet";
 
 const Profile = () => {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [newPassword, setNewPassword] = useState('')
-  const userSliceData = useSelector((state) => state.user)
-  const orderSliceData = useSelector((state) => state.order)
-  const [isLoading, setIsLoading] = useState(userSliceData.isloading)
-  const dispatch = useDispatch()
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const userSliceData = useSelector((state) => state.user);
+  const orderSliceData = useSelector((state) => state.order);
+  const [isLoading, setIsLoading] = useState(userSliceData.isloading);
+  const dispatch = useDispatch();
   const submitHandler = (e) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
     dispatch(
       updateProfile({
         name,
@@ -36,15 +37,20 @@ const Profile = () => {
         password: newPassword,
         token: userSliceData.user.token,
       })
-    ).then((res) => setIsLoading(userSliceData.isloading))
-  }
+    ).then((res) => setIsLoading(userSliceData.isloading));
+  };
   useEffect(() => {
-    dispatch(getUserOrders(userSliceData.user.token))
-    setName(userSliceData.user.name)
-    setEmail(userSliceData.user.email)
-  }, [])
+    dispatch(getUserOrders(userSliceData.user.token));
+    setName(userSliceData.user.name);
+    setEmail(userSliceData.user.email);
+  }, []);
   return (
     <>
+      <HeadHelmet
+        title={`Hi! ${userSliceData.user.name}`}
+        desc="You can buy electronics and anythings related to tech and gaming world"
+        keywords="electronics, buy, cheap, phones, laptops"
+      />
       <section className="tabsSection">
         <Tabs
           defaultActiveKey="profile"
@@ -66,7 +72,7 @@ const Profile = () => {
             )}
             <Form
               onSubmit={(e) => {
-                submitHandler(e)
+                submitHandler(e);
               }}
             >
               <Form.Group as={Row} className="m-auto" controlId="name">
@@ -81,7 +87,7 @@ const Profile = () => {
                     name="name"
                     value={name}
                     onChange={(e) => {
-                      setName(e.target.value)
+                      setName(e.target.value);
                     }}
                   />
                 </Col>
@@ -98,7 +104,7 @@ const Profile = () => {
                     name="email"
                     value={email}
                     onChange={(e) => {
-                      setEmail(e.target.value)
+                      setEmail(e.target.value);
                     }}
                   />
                 </Col>
@@ -115,7 +121,7 @@ const Profile = () => {
                     name="password"
                     value={newPassword}
                     onChange={(e) => {
-                      setNewPassword(e.target.value)
+                      setNewPassword(e.target.value);
                     }}
                   />
                 </Col>
@@ -124,21 +130,21 @@ const Profile = () => {
                 <Button
                   type="submit"
                   className="text-capitalize d-inline-block"
-                  style={{ minWidth: '110px' }}
+                  style={{ minWidth: "110px" }}
                 >
                   {isLoading ? (
                     <Spinner
                       animation="border"
                       variant="warning"
                       style={{
-                        width: '20px',
-                        height: '20px',
-                        borderWidth: '2px',
-                        animationDuration: '0.5s',
+                        width: "20px",
+                        height: "20px",
+                        borderWidth: "2px",
+                        animationDuration: "0.5s",
                       }}
                     ></Spinner>
                   ) : (
-                    'Update'
+                    "Update"
                   )}
                 </Button>
               </div>
@@ -198,7 +204,7 @@ const Profile = () => {
                         )}
                       </td>
                       <td>
-                        {order.paidAt ? order.paidAt.slice(0, 10) : '....'}
+                        {order.paidAt ? order.paidAt.slice(0, 10) : "...."}
                       </td>
                       <td>
                         {order.isDelivered ? (
@@ -239,7 +245,7 @@ const Profile = () => {
       </section>
       <ToastContainer autoClose={2000} />
     </>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;

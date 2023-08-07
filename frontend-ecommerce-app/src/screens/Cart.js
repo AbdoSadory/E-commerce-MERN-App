@@ -1,7 +1,7 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
-import EmptyCart from '../components/messages/EmptyCart'
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import EmptyCart from "../components/messages/EmptyCart";
 import {
   Button,
   Card,
@@ -11,22 +11,28 @@ import {
   ListGroup,
   ListGroupItem,
   Row,
-} from 'react-bootstrap'
-import { addItem, removeItem } from '../redux/slices/cartSlice'
+} from "react-bootstrap";
+import { addItem, removeItem } from "../redux/slices/cartSlice";
+import HeadHelmet from "../components/helmet/HeadHelmet";
 
 const Cart = () => {
-  const navigate = useNavigate()
-  const cartSliceData = useSelector((state) => state.cart)
-  const userSliceData = useSelector((state) => state.user)
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const cartSliceData = useSelector((state) => state.cart);
+  const userSliceData = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const removeFromCartHandler = (id) => {
-    dispatch(removeItem(id))
-  }
+    dispatch(removeItem(id));
+  };
   const checkOutHandler = () => {
-    userSliceData.isLogIn ? navigate('/shipping') : navigate('/login')
-  }
+    userSliceData.isLogIn ? navigate("/shipping") : navigate("/login");
+  };
   return (
     <>
+      <HeadHelmet
+        title="Cart"
+        desc="You can buy electronics and anythings related to tech and gaming world"
+        keywords="electronics, buy, cheap, phones, laptops"
+      />
       <h2 className="text-capitalize">shipping cart</h2>
       <Row>
         <Col className="shippingCartProductsContainer" lg={6}>
@@ -76,7 +82,7 @@ const Cart = () => {
                     }
                   >
                     {[...Array(item.product.countInStock).keys()].map((x) => (
-                      <option key={x} value={x + 1} style={{ color: 'blue' }}>
+                      <option key={x} value={x + 1} style={{ color: "blue" }}>
                         {x + 1}
                       </option>
                     ))}
@@ -85,7 +91,7 @@ const Cart = () => {
                 <Col md={2}>
                   <Button
                     type="button"
-                    style={{ backgroundColor: '#FF1E1E' }}
+                    style={{ backgroundColor: "#FF1E1E" }}
                     onClick={(e) => removeFromCartHandler(item.product._id)}
                   >
                     <svg
@@ -110,16 +116,16 @@ const Cart = () => {
             <ListGroupItem as="li">
               <h2 className="text-capitalize fw-normal m-0">
                 subtotal (
-                {cartSliceData.items.reduce((acc, item) => acc + item.qty, 0)}){' '}
+                {cartSliceData.items.reduce((acc, item) => acc + item.qty, 0)}){" "}
                 items
               </h2>
             </ListGroupItem>
             <ListGroupItem as="li">
               <p className="text-capitalize m-0">
-                subtotal price :{' '}
+                subtotal price :{" "}
                 {cartSliceData.items
                   .reduce((acc, item) => acc + item.product.price * item.qty, 0)
-                  .toFixed(2)}{' '}
+                  .toFixed(2)}{" "}
                 $
               </p>
             </ListGroupItem>
@@ -138,7 +144,7 @@ const Cart = () => {
         </Col>
       </Row>
     </>
-  )
-}
+  );
+};
 
-export default Cart
+export default Cart;

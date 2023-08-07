@@ -17,6 +17,7 @@ import { getOrder, updateOrderToPaid } from "../redux/slices/orderSlice.js";
 import EmptyCart from "../components/messages/EmptyCart";
 import Message from "../components/messages/Message";
 import { updateOrderToDelivered } from "../redux/slices/adminSlice";
+import HeadHelmet from "../components/helmet/HeadHelmet";
 
 const OrderDetails = () => {
   let params = useParams();
@@ -76,6 +77,11 @@ const OrderDetails = () => {
 
   return (
     <>
+      <HeadHelmet
+        title={`Order: ${orderSliceData.order._id}`}
+        desc="You can buy electronics and anythings related to tech and gaming world"
+        keywords="electronics, buy, cheap, phones, laptops"
+      />
       {isLoading ? (
         <Loader />
       ) : orderSliceData.error ? (
@@ -211,7 +217,8 @@ const OrderDetails = () => {
                             </Col>
                             <Col>
                               {product.qty} x {product.product.price}$ =
-                              {product.qty * product.product.price}$
+                              {(product.qty * product.product.price).toFixed(2)}
+                              $
                             </Col>
                           </Row>
                         </ListGroup.Item>
@@ -238,7 +245,7 @@ const OrderDetails = () => {
                     <Row>
                       <Col className="fw-bold text-primary">Items Price:</Col>
                       <Col className="text-dark">
-                        {orderSliceData.order.itemsPrice} $
+                        {orderSliceData.order.itemsPrice.toFixed(2)} $
                       </Col>
                     </Row>
                   </ListGroup.Item>

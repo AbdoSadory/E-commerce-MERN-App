@@ -21,6 +21,7 @@ import {
 } from "../redux/slices/productDetailsSlice";
 import { addItem } from "../redux/slices/cartSlice";
 import Message from "../components/messages/Message";
+import HeadHelmet from "../components/helmet/HeadHelmet";
 
 const ProductDetails = () => {
   const [qty, setQty] = useState(1);
@@ -65,6 +66,13 @@ const ProductDetails = () => {
   };
   return (
     <>
+      <HeadHelmet
+        title={productDetailsSliceData && productDetailsSliceData.product.name}
+        desc={
+          productDetailsSliceData && productDetailsSliceData.product.description
+        }
+        keywords="electronics, buy, cheap, phones, laptops"
+      />
       {productDetailsSliceData.isloading ? (
         <Loader />
       ) : productDetailsSliceData.error ? (

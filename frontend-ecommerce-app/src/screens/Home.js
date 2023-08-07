@@ -8,7 +8,8 @@ import Loader from "../components/messages/Loader";
 import Message from "../components/messages/Message";
 import { Link, useLocation, useParams } from "react-router-dom";
 import PaginationSection from "../components/pagination/Pagination";
-
+import { Helmet } from "react-helmet";
+import HeadHelmet from "../components/helmet/HeadHelmet";
 const Home = () => {
   const productsSliceData = useSelector((state) => state.products);
   let params = useParams();
@@ -26,6 +27,11 @@ const Home = () => {
   }, [params.keyword, params.pageNumber]);
   return (
     <>
+      <HeadHelmet
+        title="Welcome to MERNOOO Home"
+        desc="You can buy electronics and anythings related to tech and gaming world"
+        keywords="electronics, buy, cheap, phones, laptops"
+      />
       {(location.pathname === "/" || location.pathname === `/page/1`) && (
         <h1 className="text-center m-0">Welcome to our Project</h1>
       )}

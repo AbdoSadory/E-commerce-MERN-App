@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import CheckoutSteps from '../components/checkOut/CheckoutSteps'
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import CheckoutSteps from "../components/checkOut/CheckoutSteps";
 import {
   Button,
   Card,
@@ -10,30 +10,31 @@ import {
   ListGroupItem,
   Row,
   Spinner,
-} from 'react-bootstrap'
-import EmptyCart from '../components/messages/EmptyCart'
-import { Link, useNavigate } from 'react-router-dom'
-import { orderSlice, placeOrder } from '../redux/slices/orderSlice'
-import { ToastContainer } from 'react-toastify'
-import Message from '../components/messages/Message'
+} from "react-bootstrap";
+import EmptyCart from "../components/messages/EmptyCart";
+import { Link, useNavigate } from "react-router-dom";
+import { orderSlice, placeOrder } from "../redux/slices/orderSlice";
+import { ToastContainer } from "react-toastify";
+import Message from "../components/messages/Message";
+import HeadHelmet from "../components/helmet/HeadHelmet";
 
 const PlaceOrder = () => {
-  const userSliceData = useSelector((state) => state.user)
-  const cartSliceData = useSelector((state) => state.cart)
-  const orderSliceData = useSelector((state) => state.order)
-  const [isLoading, setIsLoading] = useState(cartSliceData.isloading)
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const userSliceData = useSelector((state) => state.user);
+  const cartSliceData = useSelector((state) => state.cart);
+  const orderSliceData = useSelector((state) => state.order);
+  const [isLoading, setIsLoading] = useState(cartSliceData.isloading);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const itemsPrice = cartSliceData.items.reduce(
-    (acc, item) => acc + item.product.price * item.qty,
+    (acc, item) => acc + item.product.price.toFixed(2) * item.qty,
     0
-  )
-  const shippingPrice = itemsPrice >= 200 ? 0 : 100
-  const taxPrice = Number((0.15 * itemsPrice).toFixed(2))
-  const totalPrice = (itemsPrice + shippingPrice + taxPrice).toFixed(2)
+  );
+  const shippingPrice = itemsPrice >= 200 ? 0 : 100;
+  const taxPrice = Number((0.15 * itemsPrice).toFixed(2));
+  const totalPrice = (itemsPrice + shippingPrice + taxPrice).toFixed(2);
   const placeOrderHandler = (e) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
     dispatch(
       placeOrder({
         token: userSliceData.user.token,
@@ -47,12 +48,17 @@ const PlaceOrder = () => {
         isPaid: false,
       })
     ).then((res) => {
-      setIsLoading(false)
-      res.payload.success && navigate(`/order/${res.payload.order.orderID}`)
-    })
-  }
+      setIsLoading(false);
+      res.payload.success && navigate(`/order/${res.payload.order.orderID}`);
+    });
+  };
   return (
     <>
+      <HeadHelmet
+        title="Place your order"
+        desc="You can buy electronics and anythings related to tech and gaming world"
+        keywords="electronics, buy, cheap, phones, laptops"
+      />
       <CheckoutSteps step1={true} step2={true} step3={true} step4={true} />
       {orderSliceData.error && (
         <Message variant="danger" message={orderSliceData.errorMessage} />
@@ -108,7 +114,7 @@ const PlaceOrder = () => {
                         </Col>
                         <Col>
                           {product.qty} x {product.product.price}$ =
-                          {product.qty * product.product.price}$
+                          {(product.qty * product.product.price).toFixed(2)}$
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -117,7 +123,7 @@ const PlaceOrder = () => {
               ) : (
                 <EmptyCart
                   variant="danger"
-                  message={'No Products In The Cart'}
+                  message={"No Products In The Cart"}
                 />
               )}
             </ListGroup.Item>
@@ -132,7 +138,7 @@ const PlaceOrder = () => {
               <ListGroup.Item className="border-bottom border-secondary">
                 <Row>
                   <Col className="fw-bold text-primary">Items Price:</Col>
-                  <Col className="text-dark">{itemsPrice} $</Col>
+                  <Col className="text-dark">{itemsPrice.toFixed(2)} $</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item className="border-bottom border-secondary">
@@ -170,14 +176,14 @@ const PlaceOrder = () => {
                       animation="border"
                       variant="warning"
                       style={{
-                        width: '20px',
-                        height: '20px',
-                        borderWidth: '2px',
-                        animationDuration: '0.5s',
+                        width: "20px",
+                        height: "20px",
+                        borderWidth: "2px",
+                        animationDuration: "0.5s",
                       }}
                     ></Spinner>
                   ) : (
-                    'Proceed'
+                    "Proceed"
                   )}
                 </Button>
               </ListGroup.Item>
@@ -187,7 +193,7 @@ const PlaceOrder = () => {
       </Row>
       <ToastContainer autoClose={2000} />
     </>
-  )
-}
+  );
+};
 
-export default PlaceOrder
+export default PlaceOrder;
