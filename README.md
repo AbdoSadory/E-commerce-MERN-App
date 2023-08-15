@@ -35,6 +35,6 @@
 
 ## <img alt="Home" src="./home.jpg"  />
 
-## <img alt="Home" src="./productDetails.jpg"  />
+## <img alt="productDetails" src="./productDetails.jpg"  />
 
-## <img alt="Home" src="./admindashboard.jpg"  />
+## <img alt="admindashboard" src="./admindashboard.jpg"  />
