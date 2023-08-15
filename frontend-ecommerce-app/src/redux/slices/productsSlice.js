@@ -19,16 +19,6 @@ export const topProducts = createAsyncThunk(
     const data = await axios
       .get(`/api/products/top-products`)
       .then((res) => {
-        toast.success("Top-Products have been fetched", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
         return {
           topProducts: {
             products: res.data.products,
@@ -39,16 +29,6 @@ export const topProducts = createAsyncThunk(
         };
       })
       .catch((e) => {
-        toast.error("Failed to fetch top-products", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
         console.log(e);
         return {
           topProducts: {
@@ -86,6 +66,7 @@ export const allProducts = createAsyncThunk(
         };
       })
       .catch((e) => {
+        console.log("slkslk");
         toast.error("Failed to fetch products", {
           position: "top-right",
           autoClose: 3000,
@@ -98,7 +79,6 @@ export const allProducts = createAsyncThunk(
         });
         console.log(e);
         return {
-          products: [],
           isloading: false,
           error: true,
           errorMessage: e.response.data.message,

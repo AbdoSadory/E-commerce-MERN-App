@@ -31,7 +31,7 @@ const AllOrders = () => {
         <Message variant="danger" message={adminSliceData.errorMessage} />
       ) : (
         <section>
-          <h2 className="m-0">Orders</h2>
+          <h2>Orders</h2>
           <Table
             striped
             bordered

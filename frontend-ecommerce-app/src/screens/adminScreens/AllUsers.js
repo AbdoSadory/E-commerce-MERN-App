@@ -29,6 +29,7 @@ const AllUsers = () => {
         <Message variant="danger" message={adminSliceData.errorMessage} />
       ) : (
         <section>
+          <h2>Users</h2>
           <Table
             striped
             bordered
