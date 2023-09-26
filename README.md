@@ -9,7 +9,7 @@
 
 1. Clone this repository to your local machine:
    ```bash
-   https://github.com/AbdoSadory/E-commerce-MERN-App.git
+   git clone https://github.com/AbdoSadory/E-commerce-MERN-App.git
    ```
 2. Install npm packages in root folder and in front-end folder:
    ```bash
